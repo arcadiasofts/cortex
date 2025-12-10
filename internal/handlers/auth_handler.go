@@ -12,20 +12,22 @@ type AuthHandler struct {
 	service *services.AuthService
 }
 
-func NewAuthHandler(s *services.AuthService) *AuthHandler {
-	return &AuthHandler{service: s}
+func (h *AuthHandler) Register(router fiber.Router) {
+	auth := router.Group("/auth")
+	auth.Post("/challenge", h.RequestChallenge)
+	auth.Post("/login", h.Login)
 }
 
 func (h *AuthHandler) RequestChallenge(c *fiber.Ctx) error {
 	type Request struct {
-		did string `json:"did"`
+		Did string `json:"did"`
 	}
 	var req Request
 	if err := c.BodyParser(&req); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	nonce, err := h.service.CreateChallenge(c.Context(), req.did)
+	nonce, err := h.service.CreateChallenge(c.Context(), req.Did)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -55,4 +57,8 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	data, _ := proto.Marshal(resp)
 	c.Set("Content-Type", "application/x-protobuf")
 	return c.Send(data)
+}
+
+func NewAuthHandler(s *services.AuthService) *AuthHandler {
+	return &AuthHandler{service: s}
 }

@@ -13,11 +13,12 @@ type AppConfig struct {
 		Version string `mapstructure:"version"`
 	} `mapstructure:"app"`
 	DB struct {
-		Host string `mapstructure:"host"`
-		Port string `mapstructure:"port"`
-		User string `mapstructure:"user"`
-		Pass string `mapstructure:"pass"`
-		Name string `mapstructure:"name"`
+		Host     string `mapstructure:"host"`
+		Port     string `mapstructure:"port"`
+		User     string `mapstructure:"user"`
+		Pass     string `mapstructure:"pass"`
+		Name     string `mapstructure:"name"`
+		TimeZone string `mapstructure:"timezone"`
 	} `mapstructure:"db"`
 	Redis struct {
 		Host string `mapstructure:"host"`

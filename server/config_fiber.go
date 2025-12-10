@@ -29,10 +29,7 @@ func RegisterAndStart(
 ) {
 	// Register routes
 	api := app.Group("/api/v1")
-	auth := api.Group("/auth")
-
-	auth.Post("/challenge", authHandler.RequestChallenge)
-	auth.Post("/login", authHandler.Login)
+	authHandler.Register(api)
 
 	// Lifecycle hook
 	lc.Append(fx.Hook{

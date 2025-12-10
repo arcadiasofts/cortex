@@ -4,12 +4,14 @@ import (
 	"backend/config"
 	"backend/internal/handlers"
 	"backend/internal/services"
+	"backend/provider/database"
 	"backend/server"
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/fx"
-	"log"
 )
 
 // Redis connect provider
@@ -29,8 +31,9 @@ func ProvideRedis(cfg *config.AppConfig) *redis.Client {
 func main() {
 	fx.New(
 		fx.Provide(
-			config.ProvideConfig,        // Configs
-			ProvideRedis,                // Redis
+			config.ProvideConfig, // Configs
+			ProvideRedis,         // Redis
+			database.NewDatabase,
 			server.ProvideFiberApp,      // Fiber App
 			services.ProvideAuthService, // -> *services.AuthService
 			handlers.NewAuthHandler,     // -> *handlers.AuthHandler
