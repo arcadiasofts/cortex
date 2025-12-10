@@ -3,9 +3,10 @@ package gateway
 
 import (
 	"backend/server/pb"
+	"log"
+
 	"github.com/gofiber/contrib/websocket"
 	"google.golang.org/protobuf/proto"
-	"log"
 )
 
 type Client struct {
