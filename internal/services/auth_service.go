@@ -1,6 +1,7 @@
 package services
 
 import (
+	"backend/config"
 	"context"
 	"crypto/ed25519"
 	"encoding/hex"
@@ -22,7 +23,7 @@ func NewAuthService(r *redis.Client, secret string) *AuthService {
 	return &AuthService{
 		redis:     r,
 		jwtSecret: []byte(secret),
-	}git reset HEAD^
+	}
 }
 
 // Create challenge (Generate nonce and save to redis)
@@ -80,4 +81,9 @@ func (s *AuthService) VerifyAndLogin(ctx context.Context, did string, nonce stri
 	s.redis.Del(ctx, key)
 
 	return s.GenerateJwt(did)
+}
+
+// ProvideAuthService Service provider
+func ProvideAuthService(r *redis.Client, cfg *config.AppConfig) *AuthService {
+	return NewAuthService(r, cfg.Jwt.Secret)
 }
